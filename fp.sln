@@ -10,6 +10,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Summator", "Samples\Summato
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConwaysGameOfLife", "Samples\ConwaysGameOfLife\ConwaysGameOfLife.csproj", "{4B77EC28-5FB5-4095-B3D7-127F5C488D6E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagCloud", "TagCloud\TagCloud.csproj", "{0008B8BD-2EE8-4F01-8DD0-56FAFFF01124}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagCloudTests", "TagCloudTests\TagCloudTests.csproj", "{B0FC3130-052D-4B28-ADD0-3CBC2E6EA798}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagCloud.Client", "TagCloud.Client\TagCloud.Client.csproj", "{65DC23A7-E5F8-47E4-ABF3-6632E66D8AD2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +38,12 @@ Global
 		{4B77EC28-5FB5-4095-B3D7-127F5C488D6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B77EC28-5FB5-4095-B3D7-127F5C488D6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B77EC28-5FB5-4095-B3D7-127F5C488D6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0008B8BD-2EE8-4F01-8DD0-56FAFFF01124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0008B8BD-2EE8-4F01-8DD0-56FAFFF01124}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65DC23A7-E5F8-47E4-ABF3-6632E66D8AD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65DC23A7-E5F8-47E4-ABF3-6632E66D8AD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0FC3130-052D-4B28-ADD0-3CBC2E6EA798}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0FC3130-052D-4B28-ADD0-3CBC2E6EA798}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C33F3A5E-A1ED-4657-9B35-968A4CB23AA1} = {754C1CC8-A8B6-46C6-B35C-8A43B80111A0}
