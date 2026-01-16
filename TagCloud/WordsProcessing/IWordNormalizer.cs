@@ -4,5 +4,5 @@ namespace TagCloud.WordsProcessing;
 
 public interface IWordNormalizer
 {
-    public Result<string> Normalize(string word);
+    public string Normalize(string word);
 }

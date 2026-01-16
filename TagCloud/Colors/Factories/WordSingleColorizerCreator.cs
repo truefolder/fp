@@ -1,14 +1,15 @@
 ﻿using TagCloud.Options;
+using TagCloud.ResultModel;
 
 namespace TagCloud.Colors.Factories;
 
 public class WordSingleColorizerCreator(IColorParser parser) : IWordColorizerCreator
 {
-    public IWordColorizer Create(TagCloudOptions options)
+    public Result<IWordColorizer> Create(TagCloudOptions options)
     {
         var colorText = options.Colors ?? "#cd5b45";
-        var color = parser.Parse(colorText);
-        
-        return new WordSingleColorizer(color);
+        return parser.Parse(colorText)
+            .Then(c => Result.Ok<IWordColorizer>(new WordSingleColorizer(c)))
+            .RefineError("Can't create single colorizer");
     }
 }

@@ -1,14 +1,18 @@
 ﻿using TagCloud.Options;
+using TagCloud.ResultModel;
 
 namespace TagCloud.Colors.Factories;
 
 public class WordGradientColorizerCreator(IColorParser parser) : IWordColorizerCreator
 {
-    public IWordColorizer Create(TagCloudOptions options)
+    public Result<IWordColorizer> Create(TagCloudOptions options)
     {
-        var colorFrom = parser.Parse(options.GradientFrom ?? "#ff0000");
-        var colorTo = parser.Parse(options.GradientTo ?? "#000000");
-        
-        return new WordGradientColorizer(colorFrom, colorTo);
+        var fromRaw = options.GradientFrom ?? "#1E3A8A";
+        var toRaw = options.GradientTo ?? "#B91C1C";
+
+        return parser.Parse(fromRaw)
+            .Then(from => parser.Parse(toRaw).Then(to =>
+                Result.Ok<IWordColorizer>(new WordGradientColorizer(from, to))))
+            .RefineError("Can't create gradient colorizer");
     }
 }
