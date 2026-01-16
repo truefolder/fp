@@ -32,7 +32,13 @@ public class Runner
             BackgroundColor = options.BackgroundColor
         };
 
-        tagCloud.Generate(tagCloudOptions);
+        var result = tagCloud.Generate(tagCloudOptions);
+
+        if (!result.IsSuccess)
+        {
+            Console.WriteLine(result.Error);
+            return 1;
+        }
 
         Console.WriteLine($"Tag cloud saved to {options.OutputFilePath}");
         return 0;
