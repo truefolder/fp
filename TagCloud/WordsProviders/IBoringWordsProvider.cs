@@ -1,6 +1,8 @@
-﻿namespace TagCloud.WordsProviders;
+﻿using TagCloud.ResultModel;
+
+namespace TagCloud.WordsProviders;
 
 public interface IBoringWordsProvider
 {
-    public HashSet<string> GetWords(string path);
+    public Result<HashSet<string>> GetWords(string path);
 }

@@ -1,8 +1,9 @@
 ﻿using TagCloud.Options;
+using TagCloud.ResultModel;
 
 namespace TagCloud;
 
 public interface ITagCloudGenerator
 {
-    public void Generate(TagCloudOptions options);
+    public Result<None> Generate(TagCloudOptions options);
 }

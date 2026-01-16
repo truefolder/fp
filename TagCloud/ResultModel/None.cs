@@ -1,4 +1,4 @@
-﻿namespace TagCloud.Result;
+﻿namespace TagCloud.ResultModel;
 
 public class None
 {

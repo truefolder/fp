@@ -1,7 +1,9 @@
-﻿namespace TagCloud.WordsProviders;
+﻿using TagCloud.ResultModel;
+
+namespace TagCloud.WordsProviders;
 
 public interface IWordsProvider
 {
-    public bool CanRead(string path);
-    public IEnumerable<string> ReadWords(string path);
+    public Result<bool> CanRead(string path);
+    public Result<IEnumerable<string>> ReadWords(string path);
 }

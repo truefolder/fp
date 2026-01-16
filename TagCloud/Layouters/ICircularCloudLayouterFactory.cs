@@ -1,8 +1,9 @@
 ﻿using SixLabors.ImageSharp;
+using TagCloud.ResultModel;
 
 namespace TagCloud.Layouters;
 
 public interface ICircularCloudLayouterFactory
 {
-    ICircularCloudLayouter Create(Size canvasSize);
+    public Result<ICircularCloudLayouter> Create(Size canvasSize);
 }

@@ -1,9 +1,10 @@
 ﻿using SixLabors.ImageSharp;
+using TagCloud.ResultModel;
 
 namespace TagCloud.Colors;
 
 public interface IColorParser
 {
-    public Color Parse(string color);
-    public List<Color> ParseMany(string colors);
+    public Result<Color> Parse(string color);
+    public Result<List<Color>> ParseMany(string colors);
 }

@@ -1,6 +1,8 @@
-﻿namespace TagCloud.WordsProviders;
+﻿using TagCloud.ResultModel;
+
+namespace TagCloud.WordsProviders;
 
 public interface IWordsProviderResolver
 {
-    IWordsProvider GetProvider(string path);
+    public Result<IWordsProvider> GetProvider(string path);
 }

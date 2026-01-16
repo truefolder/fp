@@ -1,6 +1,8 @@
-﻿namespace TagCloud.WordsProcessing;
+﻿using TagCloud.ResultModel;
+
+namespace TagCloud.WordsProcessing;
 
 public interface IFrequencyCounter
 {
-    public IEnumerable<WordFrequency> CalculateFrequencies(IEnumerable<string> words);
+    public Result<IEnumerable<WordFrequency>> CalculateFrequencies(IEnumerable<string> words);
 }
