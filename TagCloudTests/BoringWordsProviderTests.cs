@@ -15,7 +15,10 @@ public class BoringWordsProviderTests
         
         var provider = resolver.GetProvider(testFile);
         
-        var words = provider.ReadWords(testFile);
+        provider.IsSuccess.Should().BeTrue();
+        
+        var words = provider.GetValueOrThrow().ReadWords(testFile);
+        
         words.Should().Contain(["hello", "world"]);
     }
 }

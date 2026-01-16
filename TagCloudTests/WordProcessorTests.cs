@@ -23,7 +23,12 @@ public class WordProcessorTests
         var processor = new WordProcessor(normalizer, filterFactory);
         var options = new TagCloudOptions { BoringWordsFilePath = boringFile };
         
-        var processedWords = processor.Process(inputWordsProvider.ReadWords(inputFile), options).ToList();
+        
+        inputWordsProvider.IsSuccess.Should().BeTrue();
+        var words = inputWordsProvider.GetValueOrThrow().ReadWords(inputFile);
+        var processResult = processor.Process(words, options);
+        processResult.IsSuccess.Should().BeTrue();
+        var processedWords = processResult.GetValueOrThrow().ToList();
 
         processedWords.Should().Contain("hello");
         processedWords.Should().NotContain("world");

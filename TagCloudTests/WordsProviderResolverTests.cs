@@ -17,7 +17,11 @@ public class WordsProviderResolverTests
             new DocxWordsProvider()
         ]);
 
-        resolver.GetProvider(testFile).GetType().Should().Be(typeof(TxtWordsProvider));
+        var result = resolver.GetProvider(testFile);
+        
+        result.IsSuccess.Should().BeTrue();
+        
+        result.GetValueOrThrow().GetType().Should().Be(typeof(TxtWordsProvider));
     }
     
     [Test]
@@ -30,7 +34,11 @@ public class WordsProviderResolverTests
             new DocxWordsProvider(),
             new DocxWordsProvider()
         ]);
-
-        resolver.GetProvider(testFile).GetType().Should().Be(typeof(DocxWordsProvider));
+        
+        var result = resolver.GetProvider(testFile);
+        
+        result.IsSuccess.Should().BeTrue();
+        
+        result.GetValueOrThrow().GetType().Should().Be(typeof(DocxWordsProvider));
     }
 }

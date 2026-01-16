@@ -20,15 +20,19 @@ public class CircularCloudLayouterTests
     [TestCaseSource(nameof(GetInvalidSizes))]
     public void PutNextRectangle_ShouldThrow_WhenInvalidRectangleSizePresent(Size rectangleSize)
     {
-        var action = () => _layouter.TryPutNextRectangle(rectangleSize);
+        var result = _layouter.TryPutNextRectangle(rectangleSize);
         
-        action.Should().Throw<ArgumentException>();
+        result.IsSuccess.Should().BeFalse();
     }
     
     [TestCaseSource(nameof(GetValidSizes))]
     public void PutNextRectangle_RectanglesShouldHaveCorrectSizes_WhenValidSizesPresent(Size rectangleSize)
     {
-        var rectangle = _layouter.TryPutNextRectangle(rectangleSize);
+        var result = _layouter.TryPutNextRectangle(rectangleSize);
+        
+        result.IsSuccess.Should().BeTrue();
+        
+        var rectangle = result.GetValueOrThrow();
         
         rectangle.Width.Should().Be(rectangleSize.Width);
         rectangle.Height.Should().Be(rectangleSize.Height);
@@ -39,8 +43,12 @@ public class CircularCloudLayouterTests
     {
         var rectangle1 = _layouter.TryPutNextRectangle(new Size(10, 10));
         var rectangle2 = _layouter.TryPutNextRectangle(new Size(10, 10));
+
+        rectangle1.IsSuccess.Should().BeTrue();
+        rectangle2.IsSuccess.Should().BeTrue();
+
         
-        rectangle1.IntersectsWith(rectangle2).Should().BeFalse();
+        rectangle1.GetValueOrThrow().IntersectsWith(rectangle2.GetValueOrThrow()).Should().BeFalse();
     }
 
     [Test]
@@ -50,7 +58,11 @@ public class CircularCloudLayouterTests
         var random = new Random();
 
         for (var i = 0; i < 100; i++)
-            rectangles.Add(_layouter.TryPutNextRectangle(new Size(random.Next(10, 100), random.Next(10, 100))));
+        {
+            var result = _layouter.TryPutNextRectangle(new Size(random.Next(10, 100), random.Next(10, 100)));
+            result.IsSuccess.Should().BeTrue();
+            rectangles.Add(result.GetValueOrThrow());
+        }
         
         foreach (var firstRectangle in rectangles)
             foreach (var secondRectangle in rectangles.Where(r => firstRectangle != r))

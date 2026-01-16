@@ -11,7 +11,10 @@ public class FrequencyCounterTests
         var counter = new FrequencyCounter();
         var symbols = new[] {"a", "b", "c", "a", "b", "a"};
         
-        var frequencies = counter.CalculateFrequencies(symbols).ToList();
+        var result = counter.CalculateFrequencies(symbols);
+        result.IsSuccess.Should().BeTrue();
+
+        var frequencies = result.GetValueOrThrow().ToList();
 
         frequencies.Should().Contain(f => f.Word == "a" && f.Count == 3);
         frequencies.Should().Contain(f => f.Word == "b" && f.Count == 2);
