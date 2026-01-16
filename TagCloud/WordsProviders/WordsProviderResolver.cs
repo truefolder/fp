@@ -6,11 +6,18 @@ public class WordsProviderResolver(IEnumerable<IWordsProvider> providers) : IWor
 {
     public Result<IWordsProvider> GetProvider(string path)
     {
-        var provider = providers.FirstOrDefault(s => s.CanRead(path).Value);
+        if (string.IsNullOrWhiteSpace(path))
+            return Result.Fail<IWordsProvider>("Input file path is empty");
 
-        if (provider == null)
-            return Result.Fail<IWordsProvider>($"Can't find valid words provider for path {path}");
-        
+        if (!File.Exists(path))
+            return Result.Fail<IWordsProvider>($"Input file not found: {path}");
+
+        var provider = providers.FirstOrDefault(p => p.CanRead(path));
+
+        if (provider is null)
+            return Result.Fail<IWordsProvider>(
+                $"Unsupported input format '{Path.GetExtension(path)}'. Supported: .txt, .doc, .docx");
+
         return Result.Ok(provider);
     }
 }
