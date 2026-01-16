@@ -5,5 +5,5 @@ namespace TagCloud.Layouters;
 
 public interface ICircularCloudLayouter
 {
-    public Result<Rectangle> PutNextRectangle(Size rectangleSize);
+    public Result<Rectangle> TryPutNextRectangle(Size rectangleSize);
 }

@@ -20,7 +20,7 @@ public class CircularCloudLayouterTests
     [TestCaseSource(nameof(GetInvalidSizes))]
     public void PutNextRectangle_ShouldThrow_WhenInvalidRectangleSizePresent(Size rectangleSize)
     {
-        var action = () => _layouter.PutNextRectangle(rectangleSize);
+        var action = () => _layouter.TryPutNextRectangle(rectangleSize);
         
         action.Should().Throw<ArgumentException>();
     }
@@ -28,7 +28,7 @@ public class CircularCloudLayouterTests
     [TestCaseSource(nameof(GetValidSizes))]
     public void PutNextRectangle_RectanglesShouldHaveCorrectSizes_WhenValidSizesPresent(Size rectangleSize)
     {
-        var rectangle = _layouter.PutNextRectangle(rectangleSize);
+        var rectangle = _layouter.TryPutNextRectangle(rectangleSize);
         
         rectangle.Width.Should().Be(rectangleSize.Width);
         rectangle.Height.Should().Be(rectangleSize.Height);
@@ -37,8 +37,8 @@ public class CircularCloudLayouterTests
     [Test]
     public void PutNextRectangle_ShouldNotIntersectWithFirstRectangle_WhenTwoRectanglesAreAlreadyPutted()
     {
-        var rectangle1 = _layouter.PutNextRectangle(new Size(10, 10));
-        var rectangle2 = _layouter.PutNextRectangle(new Size(10, 10));
+        var rectangle1 = _layouter.TryPutNextRectangle(new Size(10, 10));
+        var rectangle2 = _layouter.TryPutNextRectangle(new Size(10, 10));
         
         rectangle1.IntersectsWith(rectangle2).Should().BeFalse();
     }
@@ -50,7 +50,7 @@ public class CircularCloudLayouterTests
         var random = new Random();
 
         for (var i = 0; i < 100; i++)
-            rectangles.Add(_layouter.PutNextRectangle(new Size(random.Next(10, 100), random.Next(10, 100))));
+            rectangles.Add(_layouter.TryPutNextRectangle(new Size(random.Next(10, 100), random.Next(10, 100))));
         
         foreach (var firstRectangle in rectangles)
             foreach (var secondRectangle in rectangles.Where(r => firstRectangle != r))

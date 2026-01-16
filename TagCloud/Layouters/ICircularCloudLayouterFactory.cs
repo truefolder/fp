@@ -5,5 +5,5 @@ namespace TagCloud.Layouters;
 
 public interface ICircularCloudLayouterFactory
 {
-    public Result<ICircularCloudLayouter> Create(Size canvasSize);
+    public ICircularCloudLayouter Create(Size canvasSize);
 }

@@ -1,4 +1,5 @@
 ﻿using SixLabors.ImageSharp;
+using TagCloud.ResultModel;
 
 namespace TagCloud.CoordinatesProviders.ArchimedesSpiral;
 

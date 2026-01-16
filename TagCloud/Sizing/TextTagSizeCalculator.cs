@@ -1,6 +1,8 @@
 ﻿using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
+using TagCloud.ResultModel;
+using TagCloud.Utils;
 using TagCloud.WordsProcessing;
 
 namespace TagCloud.Sizing;
@@ -9,20 +11,31 @@ public class TextTagSizeCalculator : ITextTagSizeCalculator
 {
     private const int Padding = 4;
     
-    public Size CalculateSize(TextTag tag, string fontName)
+    public Result<Size> CalculateSize(TextTag tag, string fontName)
     {
-        var fontFamily = SystemFonts.Families.FirstOrDefault(f => f.Name == fontName);
-
-        var font = fontFamily.CreateFont(tag.FontSize);
+        if (tag.FontSize <= 0)
+            return Result.Fail<Size>($"Invalid font size {tag.FontSize} for word {tag.Word}.");
         
-        var measured = TextMeasurer.MeasureSize(tag.Word, new RichTextOptions(font));
-        
-        var metrics = font.FontMetrics;
-        var lineHeight = (float)metrics.VerticalMetrics.LineHeight / metrics.UnitsPerEm * font.Size;
+        return FontUtils.TryGetFontFamily(fontName)
+            .Then(fontFamily => Result.Of(() =>
+            {
+                var font = fontFamily.CreateFont(tag.FontSize);
 
-        var width = (int)Math.Ceiling(measured.Width) + Padding * 2;
-        var height = (int)Math.Ceiling(lineHeight) + Padding * 2;
+                var measured = TextMeasurer.MeasureSize(tag.Word, new RichTextOptions(font));
 
-        return new Size(width, height);
+                var metrics = font.FontMetrics;
+                var lineHeight = (float)metrics.VerticalMetrics.LineHeight / metrics.UnitsPerEm * font.Size;
+
+                var width = (int)Math.Ceiling(measured.Width) + Padding * 2;
+                var height = (int)Math.Ceiling(lineHeight) + Padding * 2;
+
+                if (width <= 0 || height <= 0)
+                    return Result.Fail<Size>($"Failed to measure text size for {tag.Word}. Width and height must be greater than zero.");
+
+                return Result.Ok(new Size(width, height));
+            })).Then(x => x)
+            .RefineError($"Can't calculate size for word {tag.Word}");
     }
+
+    
 }

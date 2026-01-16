@@ -6,5 +6,5 @@ namespace TagCloud.Colors;
 
 public interface IWordColorizer
 {
-    public Result<Color> Colorize(TextTag tag);
+    public Color Colorize(TextTag tag);
 }

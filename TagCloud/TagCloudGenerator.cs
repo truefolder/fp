@@ -3,6 +3,7 @@ using TagCloud.Colors;
 using TagCloud.Colors.Factories;
 using TagCloud.Layouters;
 using TagCloud.Options;
+using TagCloud.ResultModel;
 using TagCloud.Sizing;
 using TagCloud.Visualizers;
 using TagCloud.WordsProcessing;
@@ -20,7 +21,7 @@ public class TagCloudGenerator(IWordsProviderResolver wordsProviderResolver,
     ITagCloudVisualizer visualizer,
     IColorParser colorParser) : ITagCloudGenerator
 {
-    public void Generate(TagCloudOptions options)
+    public Result<None> Generate(TagCloudOptions options)
     {
         var canvasSize = new Size(options.ImageWidth, options.ImageHeight);
         
@@ -37,7 +38,7 @@ public class TagCloudGenerator(IWordsProviderResolver wordsProviderResolver,
         foreach (var tag in tags)
         {
             var size = tagSizeCalculator.CalculateSize(tag, options.FontName);
-            var rect = layouter.PutNextRectangle(size);
+            var rect = layouter.TryPutNextRectangle(size);
             var color = colorizer.Colorize(tag);
             drawnTags.Add(new DrawnTag(tag, rect, color));
         }
