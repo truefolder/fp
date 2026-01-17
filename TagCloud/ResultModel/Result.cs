@@ -33,6 +33,7 @@ public static class Result
     {
         return new Result<T>(null, value);
     }
+    
     public static Result<None> Ok()
     {
         return Ok<None>(null);

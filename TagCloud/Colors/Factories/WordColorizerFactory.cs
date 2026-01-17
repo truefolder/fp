@@ -8,15 +8,13 @@ public class WordColorizerFactory(IIndex<string, IWordColorizerCreator> creators
 {
     public Result<IWordColorizer> Create(TagCloudOptions options)
     {
-        return Result.Of(() =>
-        {
-            if (string.IsNullOrWhiteSpace(options.ColorizerName))
-                return Result.Fail<IWordColorizer>("Colorizer name not specified");
+        if (string.IsNullOrWhiteSpace(options.ColorizerName))
+            return Result.Fail<IWordColorizer>("Colorizer name not specified");
             
-            if (!creators.TryGetValue(options.ColorizerName, out var creator))
-                return Result.Fail<IWordColorizer>($"Colorizer {options.ColorizerName} not found");
+        if (!creators.TryGetValue(options.ColorizerName, out var creator))
+            return Result.Fail<IWordColorizer>($"Colorizer {options.ColorizerName} not found");
 
-            return creator.Create(options);
-        }).Then(x => x);
+        return creator.Create(options)
+            .Then(Result.Ok);
     }
 }
