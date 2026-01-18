@@ -14,7 +14,6 @@ public class WordColorizerFactory(IIndex<string, IWordColorizerCreator> creators
         if (!creators.TryGetValue(options.ColorizerName, out var creator))
             return Result.Fail<IWordColorizer>($"Colorizer {options.ColorizerName} not found");
 
-        return creator.Create(options)
-            .Then(Result.Ok);
+        return creator.Create(options);
     }
 }

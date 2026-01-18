@@ -34,24 +34,21 @@ public class CircularCloudLayouter(Point center, ICoordinatesProvider coordinate
     
     private Result<Point> GetNextRectanglePoint(Size rectangleSize)
     {
-        return Result.Of(() =>
+        while (_pointsEnumerator.MoveNext())
         {
-            while (_pointsEnumerator.MoveNext())
-            {
-                var point = Point.Round(_pointsEnumerator.Current);
+            var point = Point.Round(_pointsEnumerator.Current);
 
-                var possibleValidPoint =
-                    new Point(point.X - rectangleSize.Width / 2, point.Y - rectangleSize.Height / 2);
-                var possibleValidRectangle = new Rectangle(possibleValidPoint, rectangleSize);
-                var isIntersects = Rectangles.Any(existingRectangle =>
-                    possibleValidRectangle.IntersectsWith(existingRectangle));
+            var possibleValidPoint =
+                new Point(point.X - rectangleSize.Width / 2, point.Y - rectangleSize.Height / 2);
+            var possibleValidRectangle = new Rectangle(possibleValidPoint, rectangleSize);
+            var isIntersects = Rectangles.Any(existingRectangle =>
+                possibleValidRectangle.IntersectsWith(existingRectangle));
 
-                if (!isIntersects)
-                    return possibleValidPoint;
-            }
+            if (!isIntersects)
+                return possibleValidPoint;
+        }
 
-            return Result.Fail<Point>(
-                $"Can't find valid point for next rectangle with width: {rectangleSize.Width} and height: {rectangleSize.Height}");
-        }).Then(x => x);
+        return Result.Fail<Point>(
+            $"Can't find valid point for next rectangle with width: {rectangleSize.Width} and height: {rectangleSize.Height}");
     }
 }

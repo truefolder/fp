@@ -15,27 +15,25 @@ public class TextTagSizeCalculator : ITextTagSizeCalculator
     {
         if (tag.FontSize <= 0)
             return Result.Fail<Size>($"Invalid font size {tag.FontSize} for word {tag.Word}.");
+
+        var fontFamily = FontUtils.TryGetFontFamily(fontName);
         
-        return FontUtils.TryGetFontFamily(fontName)
-            .Then(fontFamily => Result.Of(() =>
-            {
-                var font = fontFamily.CreateFont(tag.FontSize);
+        if (!fontFamily.IsSuccess)
+            return Result.Fail<Size>(fontFamily.Error);
+        
+        var font = fontFamily.GetValueOrThrow().CreateFont(tag.FontSize);
 
-                var measured = TextMeasurer.MeasureSize(tag.Word, new RichTextOptions(font));
+        var measured = TextMeasurer.MeasureSize(tag.Word, new RichTextOptions(font));
 
-                var metrics = font.FontMetrics;
-                var lineHeight = (float)metrics.VerticalMetrics.LineHeight / metrics.UnitsPerEm * font.Size;
+        var metrics = font.FontMetrics;
+        var lineHeight = (float)metrics.VerticalMetrics.LineHeight / metrics.UnitsPerEm * font.Size;
 
-                var width = (int)Math.Ceiling(measured.Width) + Padding * 2;
-                var height = (int)Math.Ceiling(lineHeight) + Padding * 2;
+        var width = (int)Math.Ceiling(measured.Width) + Padding * 2;
+        var height = (int)Math.Ceiling(lineHeight) + Padding * 2;
 
-                if (width <= 0 || height <= 0)
-                    return Result.Fail<Size>($"Failed to measure text size for {tag.Word}. Width and height must be greater than zero.");
+        if (width <= 0 || height <= 0)
+            return Result.Fail<Size>($"Failed to measure text size for {tag.Word}. Width and height must be greater than zero.");
 
-                return Result.Ok(new Size(width, height));
-            })).Then(x => x)
-            .RefineError($"Can't calculate size for word {tag.Word}");
+        return new Size(width, height);
     }
-
-    
 }

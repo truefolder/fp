@@ -57,32 +57,28 @@ public class TagCloudGenerator(IWordsProviderResolver wordsProviderResolver,
     
     private Result<List<DrawnTag>> Layout(List<TextTag> tags, TagCloudOptions options, IWordColorizer colorizer)
     {
-        return Result.Of(() =>
-            {
-                var canvasSize = new Size(options.ImageWidth, options.ImageHeight);
-                var layouter = layouterFactory.Create(canvasSize);
+        var canvasSize = new Size(options.ImageWidth, options.ImageHeight);
+        var layouter = layouterFactory.Create(canvasSize);
 
-                var drawn = new List<DrawnTag>(tags.Count);
+        var drawn = new List<DrawnTag>(tags.Count);
 
-                foreach (var tag in tags)
-                {
-                    var sizeRes = tagSizeCalculator.CalculateSize(tag, options.FontName);
-                    if (!sizeRes.IsSuccess)
-                        return Result.Fail<List<DrawnTag>>(sizeRes.Error);
+        foreach (var tag in tags)
+        {
+            var sizeRes = tagSizeCalculator.CalculateSize(tag, options.FontName);
+            if (!sizeRes.IsSuccess)
+                return Result.Fail<List<DrawnTag>>(sizeRes.Error);
 
-                    var rectRes = layouter.TryPutNextRectangle(sizeRes.GetValueOrThrow());
-                    if (!rectRes.IsSuccess)
-                        return Result.Fail<List<DrawnTag>>(rectRes.Error);
+            var rectRes = layouter.TryPutNextRectangle(sizeRes.GetValueOrThrow());
+            if (!rectRes.IsSuccess)
+                return Result.Fail<List<DrawnTag>>(rectRes.Error);
 
-                    var rect = rectRes.GetValueOrThrow();
-                    var color = colorizer.Colorize(tag);
+            var rect = rectRes.GetValueOrThrow();
+            var color = colorizer.Colorize(tag);
 
-                    drawn.Add(new DrawnTag(tag, rect, color));
-                }
+            drawn.Add(new DrawnTag(tag, rect, color));
+        }
 
-                return Result.Ok(drawn);
-            }).Then(x => x)
-            .RefineError("Can't layout tags");
+        return drawn;
     }
     
     private Result<None> ValidateOptions(TagCloudOptions options)
